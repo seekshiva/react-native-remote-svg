@@ -5,7 +5,7 @@
 
 ## Installation
 
-Using [yarn](https://yarnpkg.com/):
+Using [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/):
 
     $ yarn add react-native-remote-svg
 
@@ -42,16 +42,12 @@ width/height of the image (default to 100, 100).
 When you load a local image, width/height are not mandatory:
 
 ```js
-import Image from 'react-native-remote-svg'
-
-<Image source={require('./image.svg')} />
+<Image source={require('./image.svg')} />;
 ```
 
 You can load normal jpg/png images as well
 
 ```js
-import Image from 'react-native-remote-svg'
-
 <Image
   source={{ uri: 'https://example.com/my-other-pic.png' }
   style={{ width: 100, height: 120}}
