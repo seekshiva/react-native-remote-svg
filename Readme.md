@@ -34,6 +34,23 @@ import Image from 'react-native-remote-svg'
   source={{ uri: 'https://example.com/my-pic.svg' }
   style={{ width: 200, height: 532}}
 />
+```
+
+**Note:** When you load an image from the internet, you need to specify
+width/height of the image (default to 100, 100).
+
+When you load a local image, width/height are not mandatory:
+
+```js
+import Image from 'react-native-remote-svg'
+
+<Image source={require('./image.svg')} />
+```
+
+You can load normal jpg/png images as well
+
+```js
+import Image from 'react-native-remote-svg'
 
 <Image
   source={{ uri: 'https://example.com/my-other-pic.png' }
