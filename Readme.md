@@ -32,7 +32,8 @@ import Image from 'react-native-remote-svg'
 
 <Image
   source={{ uri: 'https://example.com/my-pic.svg' }
-  style={{ width: 200, height: 532}}
+  size={100}
+  style={{ width: 100, height: 100}}
 />
 ```
 
