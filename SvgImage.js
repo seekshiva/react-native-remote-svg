@@ -35,7 +35,7 @@ class SvgImage extends Component {
   render() {
     const props = this.props;
     const { svgContent } = this.state;
-    const firstHtml = this.createFirstHtml(props.size,props.size);
+    const firstHtml = this.createFirstHtml(props.style.height,props.style.width);
     if (svgContent) {
       return (
         <View style={[props.containerStyle, props.style]}>
