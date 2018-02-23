@@ -43,8 +43,8 @@ class SvgImage extends Component {
             scalesPageToFit={false}
             style={[
               {
-                width: 200,
-                height: 100,
+                width: props.style.width,
+                height: props.style.height,
                 backgroundColor: 'transparent',
               },
               props.style,
