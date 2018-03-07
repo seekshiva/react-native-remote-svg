@@ -18,13 +18,20 @@ class SvgImage extends Component {
   doFetch = props => {
     let uri = props.source && props.source.uri;
     if (uri) {
-      console.log('fetching', uri);
-      fetch(uri)
-        .then(res => res.text())
-        .then(text => this.setState({ fetchingUrl: uri, svgContent: text }))
-        .catch(err => {
-          console.error('got error', err);
-        });
+      if (uri.match(/^data:image\/svg/)) {
+        const index = uri.indexOf('<svg');
+        this.setState({ fetchingUrl: uri, svgContent: uri.slice(index) });
+      } else {
+        console.log('fetching', uri);
+        fetch(uri)
+          .then(res => res.text())
+          .then(text => {
+            this.setState({ fetchingUrl: uri, svgContent: text });
+          })
+          .catch(err => {
+            console.error('got error', err);
+          });
+      }
     }
   };
   render() {
