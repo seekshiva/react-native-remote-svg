@@ -32,7 +32,7 @@ class SvgImage extends Component {
     const { svgContent } = this.state;
     if (svgContent) {
       return (
-        <View style={[props.containerStyle, props.style]}>
+        <View style={props.containerStyle || props.style}>
           <WebView
             scalesPageToFit={false}
             style={[
