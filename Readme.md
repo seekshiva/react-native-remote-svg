@@ -36,13 +36,28 @@ import Image from 'react-native-remote-svg'
 />
 ```
 
+supports data uri as well:
+
+```js
+import Image from 'react-native-remote-svg'
+
+<Image
+  source={{
+    uri: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px"  viewBox="0 0 100 100">
+      <ellipse data-custom-shape="ellipse" cx="50" cy="50" rx="50" ry="50" fill="green"  stroke="#00FF00" stroke-width ="2" />
+    </svg>`
+  }}
+  style={{ width: 100, height: 100}}
+/>
+```
+
 **Note:** When you load an image from the internet, you need to specify
 width/height of the image (default to 100, 100).
 
 When you load a local image, width/height are not mandatory:
 
 ```js
-<Image source={require('./image.svg')} />;
+<Image source={require('./image.svg')} />
 ```
 
 You can load normal jpg/png images as well
