@@ -34,7 +34,7 @@ class SvgImage extends Component {
       return (
         <View style={props.containerStyle || props.style}>
           <WebView
-            scalesPageToFit={false}
+            scalesPageToFit={true}
             style={[
               {
                 width: 200,
