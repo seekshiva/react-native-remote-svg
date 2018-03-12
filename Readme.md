@@ -21,7 +21,7 @@ Just import and use!
 You need to import `Image` from this package instead of from react-native
 
 ```diff
-- import Image from 'react-native'
+- import { Image } from 'react-native'
 + import Image from 'react-native-remote-svg'
 ```
 
