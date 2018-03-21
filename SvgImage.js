@@ -3,8 +3,7 @@
 import React, { Component } from 'react';
 import { View, WebView } from 'react-native';
 
-const firstHtml =
-  '<html><head><style>html, body { margin:0; padding:0; overflow:hidden; background-color: transparent; } svg { position:fixed; top:0; left:0; height:100%; width:100% }</style></head><body>';
+
 const lastHtml = '</body></html>';
 
 class SvgImage extends Component {
@@ -34,9 +33,16 @@ class SvgImage extends Component {
       }
     }
   };
+
+  createFirstHtml(height,width){
+      return '<html><head><style>html, body { margin:0; padding:0; overflow:hidden; background-color: transparent; } svg {' +
+          ' position:fixed; top:0; left:0; height:'+ height + '; width:'+ width + ' }</style></head><body>';
+  }
+
   render() {
     const props = this.props;
     const { svgContent } = this.state;
+    const firstHtml = this.createFirstHtml(props.style.height,props.style.width);
     if (svgContent) {
       return (
         <View pointerEvents="none" style={[props.style, props.containerStyle]}>
@@ -44,8 +50,8 @@ class SvgImage extends Component {
             scalesPageToFit={true}
             style={[
               {
-                width: 200,
-                height: 100,
+                width: props.style.width,
+                height: props.style.height,
                 backgroundColor: 'transparent',
               },
               props.style,
