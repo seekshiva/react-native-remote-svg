@@ -31,7 +31,7 @@ and you can use this Image component like you normally would:
 import Image from 'react-native-remote-svg'
 
 <Image
-  source={{ uri: 'https://example.com/my-pic.svg' }
+  source={{ uri: 'https://example.com/my-pic.svg' }}
   style={{ width: 200, height: 532}}
 />
 ```
