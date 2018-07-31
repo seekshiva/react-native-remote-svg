@@ -4,11 +4,20 @@
   "repository": "seekshiva/react-native-remote-svg",
   "version": "1.2.0",
   "main": "index.js",
-  "authors": ["Shiva Nandan"],
+  "authors": [
+    "Shiva Nandan"
+  ],
   "license": "MIT",
   "peerDependencies": {
     "react": ">=15",
     "react-native": ">=0.48"
   },
-  "keywords": ["react-native", "svg", "image"]
+  "keywords": [
+    "react-native",
+    "svg",
+    "image"
+  ],
+  "dependencies": {
+    "react-native-webview-android": "^1.1.16"
+  }
 }
