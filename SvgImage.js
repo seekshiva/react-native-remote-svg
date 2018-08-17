@@ -3,6 +3,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { View, WebView, StyleSheet } from 'react-native';
+const fetchingDebug = require("debug")("react-native-remote-svg:SvgImage:fetch");
+const fetchResultDebug = require("debug")("react-native-remote-svg:SvgImage:fetch:result");
 import Promise from 'bluebird';
 Promise.config({ cancellation: true }); // Need to explicitly enable this feature
 
@@ -56,7 +58,7 @@ class SvgImage extends Component {
         const index = uri.indexOf('<svg');
         this.setState({ svgContent: uri.slice(index) });
       } else {
-        console.log('fetching', uri);
+        fetchingDebug('Fetching SVG from %s', uri);
         this.setState(({fetchingPromise:previousFetch}) => ({ fetchingPromise:
           Promise.resolve(fetch(uri))
             .call("text")
