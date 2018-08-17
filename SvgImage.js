@@ -2,15 +2,12 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { View, WebView, StyleSheet } from 'react-native';
+import { View, WebView } from 'react-native';
 import Promise from 'bluebird';
 Promise.config({ cancellation: true }); // Need to explicitly enable this feature
 
-// Calculate this once
-const styleType = PropTypes.oneOfType([
-  PropTypes.instanceOf(StyleSheet.create({display:"none"}).constructor).isRequired,
-  PropTypes.object.isRequired,
-]);
+// TODO Make this something more precise oneOf(object,_?_), where _?_ is the type returned by `StyleSheet.create`.
+const styleType = PropTypes.object.isRequired;
 
 const firstHtml =
   '<html><head><style>html, body { margin:0; padding:0; overflow:hidden; background-color: transparent; } svg { position:fixed; top:0; left:0; height:100%; width:100% }</style></head><body>';
