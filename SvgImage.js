@@ -6,6 +6,12 @@ import { View, WebView, StyleSheet } from 'react-native';
 import Promise from 'bluebird';
 Promise.config({ cancellation: true }); // Need to explicitly enable this feature
 
+// Calculate this once
+const styleType = PropTypes.oneOfType([
+  PropTypes.instanceOf(StyleSheet.create({display:"none"}).constructor).isRequired,
+  PropTypes.object.isRequired,
+]);
+
 const firstHtml =
   '<html><head><style>html, body { margin:0; padding:0; overflow:hidden; background-color: transparent; } svg { position:fixed; top:0; left:0; height:100%; width:100% }</style></head><body>';
 const lastHtml = '</body></html>';
@@ -16,14 +22,8 @@ class SvgImage extends Component {
     source: PropTypes.shape({
         uri: PropTypes.string.isRequired
       }).isRequired,
-    containerStyle: PropTypes.oneOfType([
-        PropTypes.instanceOf(StyleSheet).isRequired,
-        PropTypes.object.isRequired,
-      ]),
-    style: PropTypes.oneOfType([
-        PropTypes.instanceOf(StyleSheet).isRequired,
-        PropTypes.object.isRequired,
-    ]),
+    containerStyle: styleType,
+    style: styleType,
   }
 
   state = {
