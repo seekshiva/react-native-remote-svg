@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 import { View, WebView } from 'react-native';
+const fetchingDebug = require("debug")("react-native-remote-svg:SvgImage:fetch");
+const fetchResultDebug = require("debug")("react-native-remote-svg:SvgImage:fetch:result");
 
 const firstHtml =
   '<html><head><style>html, body { margin:0; padding:0; overflow:hidden; background-color: transparent; } svg { position:fixed; top:0; left:0; height:100%; width:100% }</style></head><body>';
@@ -22,15 +24,11 @@ class SvgImage extends Component {
         const index = uri.indexOf('<svg');
         this.setState({ fetchingUrl: uri, svgContent: uri.slice(index) });
       } else {
-        console.log('fetching', uri);
+        fetchingDebug('Fetching SVG from %s', uri);
         fetch(uri)
-          .then(res => res.text())
-          .then(text => {
-            this.setState({ fetchingUrl: uri, svgContent: text });
-          })
-          .catch(err => {
-            console.error('got error', err);
-          });
+          .tap(res => fetchResultDebug("Result of fetching %s => %O", uri, res) )
+          .tap(res => this.setState({ fetchingUrl: uri, svgContent: res.text() }) )
+          .catch(err => console.error('Error fetching SVG', uri, err));
       }
     }
   };
