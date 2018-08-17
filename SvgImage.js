@@ -1,46 +1,81 @@
 // @flow
 
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { View, WebView } from 'react-native';
+import { View, WebView, StyleSheet } from 'react-native';
+import Promise from 'bluebird';
+Promise.config({ cancellation: true }); // Need to explicitly enable this feature
 
 const firstHtml =
   '<html><head><style>html, body { margin:0; padding:0; overflow:hidden; background-color: transparent; } svg { position:fixed; top:0; left:0; height:100%; width:100% }</style></head><body>';
 const lastHtml = '</body></html>';
 
 class SvgImage extends Component {
-  state = { fetchingUrl: null, svgContent: null };
+
+  static propTypes = {
+    source: PropTypes.shape({
+        uri: PropTypes.string.isRequired
+      }).isRequired,
+    containerStyle: PropTypes.oneOfType([
+        PropTypes.instanceOf(StyleSheet).isRequired,
+        PropTypes.object.isRequired,
+      ]),
+    style: PropTypes.oneOfType([
+        PropTypes.instanceOf(StyleSheet).isRequired,
+        PropTypes.object.isRequired,
+    ]),
+  }
+
+  state = {
+    svgContent: null,
+    fetchingPromise: null,
+  };
+
   componentDidMount() {
-    this.doFetch(this.props);
+    this.doFetch();
   }
-  componentWillReceiveProps(nextProps) {
-    this.doFetch(nextProps);
+
+  componentWillUnmount() {
+    const { fetchingPromise } = this.state || {};
+    if(fetchingPromise) fetchingPromise.cancel();
   }
-  doFetch = props => {
-    let uri = props.source && props.source.uri;
+
+  componentDidUpdate(prevProps) {
+    const { source:oldSource } = prevProps || {};
+    const { uri:oldUri } = oldSource || {};
+    const { source:newSource } = this.props || {};
+    const { uri:newUri } = newSource || {};
+    if(oldUri !== newUri) this.doFetch();
+  }
+
+  doFetch() {
+    const { source } = this.props || {};
+    const { uri } = source || {};
     if (uri) {
       if (uri.match(/^data:image\/svg/)) {
         const index = uri.indexOf('<svg');
-        this.setState({ fetchingUrl: uri, svgContent: uri.slice(index) });
+        this.setState({ svgContent: uri.slice(index) });
       } else {
         console.log('fetching', uri);
-        fetch(uri)
-          .then(res => res.text())
-          .then(text => {
-            this.setState({ fetchingUrl: uri, svgContent: text });
-          })
-          .catch(err => {
-            console.error('got error', err);
-          });
+        this.setState(({fetchingPromise:previousFetch}) => ({ fetchingPromise:
+          Promise.resolve(fetch(uri))
+            .call("text")
+            .then(text => this.setState({ svgContent: text }))
+            .timeout(1000 * 60, `SVG URI fetch timed out: ${uri}`)
+            .catch(e => console.error(`Error fetching SVG URI: ${e.message||e}`, {uri, e}))
+            .return((previousFetch && previousFetch.isPending()) ? previousFetch : null) // Ensure we resolve/cancel previous fetch
+        }))
       }
     }
-  };
+  }
+
   render() {
-    const props = this.props;
-    const { svgContent } = this.state;
-    if (svgContent) {
+    const props = this.props || {};
+    const { svgContent } = this.state || {};
+    const hasSvgContent = Boolean(svgContent);
       return (
-        <View pointerEvents="none" style={[props.style, props.containerStyle]}>
-          <WebView
+        <View pointerEvents="none" style={[props.containerStyle, hasSvgContent ? {} : props.style]}>
+          { hasSvgContent && <WebView
             originWhitelist={['*']}
             scalesPageToFit={true}
             style={[
@@ -53,17 +88,10 @@ class SvgImage extends Component {
             ]}
             scrollEnabled={false}
             source={{ html: `${firstHtml}${svgContent}${lastHtml}` }}
-          />
+          /> }
         </View>
       );
-    } else {
-      return (
-        <View
-          pointerEvents="none"
-          style={[props.containerStyle, props.style]}
-        />
-      );
-    }
   }
 }
+
 export default SvgImage;
