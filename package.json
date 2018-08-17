@@ -16,5 +16,11 @@
     "react-native",
     "svg",
     "image"
-  ]
+  ],
+  "dependencies": {
+    "debug": "^3.1.0"
+  },
+  "devDependencies": {
+    "supports-color": "^5.4.0"
+  }
 }
