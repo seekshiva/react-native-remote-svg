@@ -63,7 +63,6 @@ class SvgImage extends Component {
           Promise.resolve(fetch(uri))
             .call("text")
             .then(text => this.setState({ svgContent: text }))
-            .timeout(1000 * 60, `SVG URI fetch timed out: ${uri}`)
             .catch(e => console.error(`Error fetching SVG URI: ${e.message||e}`, {uri, e}))
             .return((previousFetch && previousFetch.isPending()) ? previousFetch : null) // Ensure we resolve/cancel previous fetch
         }))
