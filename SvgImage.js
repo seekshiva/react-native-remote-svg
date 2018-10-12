@@ -22,7 +22,6 @@ class SvgImage extends Component {
         const index = uri.indexOf('<svg');
         this.setState({ fetchingUrl: uri, svgContent: uri.slice(index) });
       } else {
-        console.log('fetching', uri);
         fetch(uri)
           .then(res => res.text())
           .then(text => {
