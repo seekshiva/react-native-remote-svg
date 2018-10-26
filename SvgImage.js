@@ -29,7 +29,10 @@ class SvgImage extends Component {
           })
           .catch(err => {
             console.error('got error', err);
-          });
+          })
+          .finally(() => {
+            props.onLoadEnd && props.onLoadEnd();
+          })
       }
     }
   };

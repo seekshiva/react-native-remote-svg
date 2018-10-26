@@ -78,7 +78,7 @@ Here are the list of react-native Image features that are supported:
 * [ ] blurRadius
 * [ ] onLayout
 * [ ] onLoad
-* [ ] onLoadEnd
+* [x] onLoadEnd
 * [ ] onLoadStart
 * [ ] resizeMode
 * [ ] onError
