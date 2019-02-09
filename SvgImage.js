@@ -56,7 +56,7 @@ class SvgImage extends Component {
               props.style,
             ]}
             scrollEnabled={false}
-            source={{ html: `${firstHtml}${svgContent}${lastHtml}` }}
+            source={{ html: encodeURIComponent(`${firstHtml}${svgContent}${lastHtml}`) }}
           />
         </View>
       );
