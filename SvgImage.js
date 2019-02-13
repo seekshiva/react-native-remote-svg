@@ -13,7 +13,12 @@ class SvgImage extends Component {
     this.doFetch(this.props);
   }
   componentWillReceiveProps(nextProps) {
-    this.doFetch(nextProps);
+    const prevUri = this.props.source && this.props.source.uri;
+    const nextUri = nextProps.source && nextProps.source.uri;
+
+    if (nextUri && prevUri !== nextUri) {
+      this.doFetch(nextProps);
+    }
   }
   doFetch = async props => {
     let uri = props.source && props.source.uri;
