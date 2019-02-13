@@ -34,7 +34,7 @@ class SvgImage extends Component {
           })
           .finally(() => {
             props.onLoadEnd && props.onLoadEnd();
-          })
+          });
       }
     }
   };
@@ -42,6 +42,7 @@ class SvgImage extends Component {
     const props = this.props;
     const { svgContent } = this.state;
     if (svgContent) {
+      const html = `${firstHtml}${svgContent}${lastHtml}`;
       return (
         <View pointerEvents="none" style={[props.style, props.containerStyle]}>
           <WebView
@@ -56,7 +57,10 @@ class SvgImage extends Component {
               props.style,
             ]}
             scrollEnabled={false}
-            source={{ html: Platform.OS === 'ios' ? `${firstHtml}${svgContent}${lastHtml}` : encodeURIComponent(`${firstHtml}${svgContent}${lastHtml}`) }}          />
+            source={{
+              html: Platform.OS === 'ios' ? html : encodeURIComponent(html),
+            }}
+          />
         </View>
       );
     } else {
