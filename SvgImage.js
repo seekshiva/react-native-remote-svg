@@ -15,27 +15,23 @@ class SvgImage extends Component {
   componentWillReceiveProps(nextProps) {
     this.doFetch(nextProps);
   }
-  doFetch = props => {
+  doFetch = async props => {
     let uri = props.source && props.source.uri;
     if (uri) {
       props.onLoadStart && props.onLoadStart();
       if (uri.match(/^data:image\/svg/)) {
         const index = uri.indexOf('<svg');
         this.setState({ fetchingUrl: uri, svgContent: uri.slice(index) });
-        props.onLoadEnd && props.onLoadEnd();
       } else {
-        fetch(uri)
-          .then(res => res.text())
-          .then(text => {
-            this.setState({ fetchingUrl: uri, svgContent: text });
-          })
-          .catch(err => {
-            console.error('got error', err);
-          })
-          .finally(() => {
-            props.onLoadEnd && props.onLoadEnd();
-          });
+        try {
+          const res = await fetch(uri);
+          const text = await res.text();
+          this.setState({ fetchingUrl: uri, svgContent: text });
+        } catch (err) {
+          console.error('got error', err);
+        }
       }
+      props.onLoadEnd && props.onLoadEnd();
     }
   };
   render() {
