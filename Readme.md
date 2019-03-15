@@ -16,6 +16,15 @@ types.
 It doesn't require any native code setup. No need to do any `react-native link`.
 Just import and use!
 
+## Breaking Changes:
+
+This project follows semantic versioning. Here are the breaking changes:
+
+- **v2.0.0**
+  - As of React Native 0.57, WebView has been decoupled and moved to a separate
+    project. This update imports WebView from react-native-webview and can only
+    be used in projects using RN 0.57 or later.
+
 ## Usage:
 
 You need to import `Image` from this package instead of from react-native
@@ -28,27 +37,27 @@ You need to import `Image` from this package instead of from react-native
 and you can use this Image component like you normally would:
 
 ```js
-import Image from 'react-native-remote-svg'
+import Image from 'react-native-remote-svg';
 
 <Image
   source={{ uri: 'https://example.com/my-pic.svg' }}
-  style={{ width: 200, height: 532}}
-/>
+  style={{ width: 200, height: 532 }}
+/>;
 ```
 
 supports data uri as well:
 
 ```js
-import Image from 'react-native-remote-svg'
+import Image from 'react-native-remote-svg';
 
 <Image
   source={{
     uri: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px"  viewBox="0 0 100 100">
       <ellipse data-custom-shape="ellipse" cx="50" cy="50" rx="50" ry="50" fill="green"  stroke="#00FF00" stroke-width ="2" />
-    </svg>`
+    </svg>`,
   }}
-  style={{ width: 100, height: 100}}
-/>
+  style={{ width: 100, height: 100 }}
+/>;
 ```
 
 **Note:** When you load an image from the internet, you need to specify
@@ -73,23 +82,23 @@ You can load normal jpg/png images as well
 
 Here are the list of react-native Image features that are supported:
 
-* [x] source
-* [x] style
-* [ ] blurRadius
-* [ ] onLayout
-* [ ] onLoad
-* [x] onLoadEnd
-* [ ] onLoadStart
-* [ ] resizeMode
-* [ ] onError
-* [ ] testID
-* [ ] resizeMethod
-* [ ] accessibilityLabel
-* [ ] accessible
-* [ ] capInsets
-* [ ] defaultSource
-* [ ] onPartialLoad
-* [ ] onProgress
+- [x] source
+- [x] style
+- [ ] blurRadius
+- [ ] onLayout
+- [ ] onLoad
+- [x] onLoadEnd
+- [ ] onLoadStart
+- [ ] resizeMode
+- [ ] onError
+- [ ] testID
+- [ ] resizeMethod
+- [ ] accessibilityLabel
+- [ ] accessible
+- [ ] capInsets
+- [ ] defaultSource
+- [ ] onPartialLoad
+- [ ] onProgress
 
 The goal is to have full feature parity with react-native's Image and then add
 this component directly into react-native itself.
