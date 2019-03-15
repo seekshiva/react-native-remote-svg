@@ -1,7 +1,8 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, WebView, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 const firstHtml =
   '<html><head><style>html, body { margin:0; padding:0; overflow:hidden; background-color: transparent; } svg { position:fixed; top:0; left:0; height:100%; width:100% }</style></head><body>';
