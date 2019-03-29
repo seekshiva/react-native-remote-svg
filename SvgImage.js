@@ -49,7 +49,7 @@ class SvgImage extends Component {
           <WebView
             originWhitelist={['*']}
             scalesPageToFit={true}
-            useWebkit={false}
+            useWebKit={false}
             style={[
               {
                 width: 200,
