@@ -11,6 +11,8 @@ const getHTML = (svgContent, style) => `
       html, body {
         margin: 0;
         padding: 0;
+        height: 100%;
+        width: 100%;
         overflow: hidden;
         background-color: transparent;
       }
@@ -84,6 +86,8 @@ class SvgImage extends Component {
               props.style,
             ]}
             scrollEnabled={false}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             source={{ html }}
           />
         </View>
