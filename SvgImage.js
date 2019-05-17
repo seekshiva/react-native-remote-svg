@@ -1,12 +1,34 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 
-const firstHtml =
-  '<html><head><style>html, body { margin:0; padding:0; overflow:hidden; background-color: transparent; } svg { position:fixed; top:0; left:0; height:100%; width:100% }</style></head><body>';
-const lastHtml = '</body></html>';
+const getHTML = (svgContent, style) => `
+<html data-key="key-${style.height}-${style.width}">
+  <head>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: transparent;
+      }
+      svg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    ${svgContent}
+  </body>
+</html>
+`;
 
 class SvgImage extends Component {
   state = { fetchingUrl: null, svgContent: null };
@@ -44,7 +66,9 @@ class SvgImage extends Component {
     const props = this.props;
     const { svgContent } = this.state;
     if (svgContent) {
-      const html = `${firstHtml}${svgContent}${lastHtml}`;
+      const flattenedStyle = StyleSheet.flatten(props.style) || {};
+      const html = getHTML(svgContent, flattenedStyle);
+
       return (
         <View pointerEvents="none" style={[props.style, props.containerStyle]}>
           <WebView
@@ -74,4 +98,5 @@ class SvgImage extends Component {
     }
   }
 }
+
 export default SvgImage;
