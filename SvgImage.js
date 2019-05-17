@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View, Platform } from 'react-native';
+import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 const firstHtml =
@@ -60,9 +60,7 @@ class SvgImage extends Component {
               props.style,
             ]}
             scrollEnabled={false}
-            source={{
-              html: Platform.OS === 'ios' ? html : encodeURIComponent(html),
-            }}
+            source={{ html }}
           />
         </View>
       );
