@@ -23,6 +23,7 @@ const getHTML = (svgContent, style) => `
         height: 100%;
         width: 100%;
         overflow: hidden;
+        fill: ${style.fill};
       }
     </style>
   </head>

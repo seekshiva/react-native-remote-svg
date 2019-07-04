@@ -56,7 +56,7 @@ import Image from 'react-native-remote-svg';
       <ellipse data-custom-shape="ellipse" cx="50" cy="50" rx="50" ry="50" fill="green"  stroke="#00FF00" stroke-width ="2" />
     </svg>`,
   }}
-  style={{ width: 100, height: 100 }}
+  style={{ width: 100, height: 100, fill: '#00ffff' /* override svg fill */ }}
 />;
 ```
 
@@ -74,7 +74,7 @@ You can load normal jpg/png images as well
 ```js
 <Image
   source={{ uri: 'https://example.com/my-other-pic.png' }
-  style={{ width: 100, height: 120}}
+  style={{ width: 100, height: 120, fill: '#00ffff' /* override svg fill */}}
 />
 ```
 
