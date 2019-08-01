@@ -5,7 +5,7 @@ import SvgImage from './SvgImage';
 
 const MyImage = props => {
   const source = resolveAssetSource(props.source);
-  if (source && (source.uri && source.uri.match('.svg'))) {
+  if (source && (source.uri && source.uri.match('^[^?]+\\.svg(\\?.*)?$'))) {
     const style = props.style || {};
     if (source.__packager_asset && typeof style !== 'number') {
       if (!style.width) {
