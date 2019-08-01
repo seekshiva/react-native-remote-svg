@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import SvgImage from './SvgImage';
 
-const MyImage = props => {
+const MyImage = React.forwardRef((props, ref) => {
   const source = resolveAssetSource(props.source);
   if (source && (source.uri && source.uri.match('.svg'))) {
     const style = props.style || {};
@@ -15,10 +15,10 @@ const MyImage = props => {
         style.height = source.height;
       }
     }
-    return <SvgImage {...props} source={source} style={style} />;
+    return <SvgImage ref={ref} {...props} source={source} style={style} />;
   } else {
-    return <Image {...props} />;
+    return <Image ref={ref} {...props} />;
   }
-};
+});
 
 export default MyImage;
