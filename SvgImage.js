@@ -79,11 +79,10 @@ class SvgImage extends Component {
             useWebKit={false}
             style={[
               {
-                width: 200,
-                height: 100,
+                width: props.style.width || 200,
+                height: props.style.height || 100,
                 backgroundColor: 'transparent',
               },
-              props.style,
             ]}
             scrollEnabled={false}
             showsHorizontalScrollIndicator={false}
