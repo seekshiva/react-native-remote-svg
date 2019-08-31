@@ -32,8 +32,10 @@ const getHTML = (svgContent, style) => `
 </html>
 `;
 
+const injectedJavaScript = `window.ReactNativeWebView.postMessage('pageLoaded'); true;`;
+
 class SvgImage extends Component {
-  state = { fetchingUrl: null, svgContent: null };
+  state = { fetchingUrl: null, svgContent: null, loaded: false };
   componentDidMount() {
     this.doFetch(this.props);
   }
@@ -64,30 +66,42 @@ class SvgImage extends Component {
       props.onLoadEnd && props.onLoadEnd();
     }
   };
+  webViewMessageHandler = event => {
+    if (event.nativeEvent.data === 'pageLoaded') {
+      this.setState({
+        loaded: true,
+      });
+    }
+  };
   render() {
     const props = this.props;
-    const { svgContent } = this.state;
+    const { svgContent, loaded } = this.state;
     if (svgContent) {
       const flattenedStyle = StyleSheet.flatten(props.style) || {};
       const html = getHTML(svgContent, flattenedStyle);
+      const webViewStyle = loaded
+        ? [
+            {
+              width: 200,
+              height: 100,
+            },
+            props.style,
+          ]
+        : { flex: 0, height: 0, opacity: 0 };
 
       return (
         <View pointerEvents="none" style={[props.style, props.containerStyle]}>
           <WebView
             originWhitelist={['*']}
             useWebKit
-            style={[
-              {
-                width: 200,
-                height: 100,
-                backgroundColor: 'transparent',
-              },
-              props.style,
-            ]}
+            style={webViewStyle}
             scrollEnabled={false}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             source={{ html }}
+            injectedJavaScript={injectedJavaScript}
+            javaScriptEnabled
+            onMessage={this.webViewMessageHandler}
           />
         </View>
       );
