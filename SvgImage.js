@@ -39,11 +39,18 @@ export const SvgImage = ({
   onLoadStart,
   onLoadEnd,
 }) => {
+  const [didMount, setDidMount] = useState(false);
   const [svgContent, setSvgContent] = useState(null);
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
+    setDidMount(true);
     doFetch(uri);
+    return () => setDidMount(false);
   }, [uri]);
+
+  if (!didMount) {
+    return null;
+  }
 
   async function doFetch() {
     if (uri) {
