@@ -18,8 +18,8 @@ const getHTML = (svgContent, style) => `
         position: fixed;
         top: 0;
         left: 0;
-        height: 100vh;
-        width: 100vw;
+        height: 100%;
+        width: 100%;
         overflow: hidden;
       }
     </style>
@@ -66,22 +66,20 @@ export const SvgImage = ({
   if (svgContent) {
     const flattenedStyle = StyleSheet.flatten(style) || {};
     const html = getHTML(svgContent, flattenedStyle);
-    const webViewStyle = loaded
-      ? [
-          {
-            width: 200,
-            height: 100,
-          },
-          style,
-        ]
-      : { flex: 0, height: 0, opacity: 0 };
-
     return (
       <View pointerEvents="none" style={[style, containerStyle]}>
         <WebView
           originWhitelist={["*"]}
+          scalesPageToFit
           useWebKit
-          style={webViewStyle}
+          style={[
+            {
+              width: 200,
+              height: 100,
+              backgroundColor: "transparent",
+            },
+            style,
+          ]}
           scrollEnabled={false}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
