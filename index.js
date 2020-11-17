@@ -1,12 +1,11 @@
 import React from "react";
 import { Image } from "react-native";
-import SvgImage from "./SvgImage";
+import { SvgImage } from "./SvgImage";
 
-const MyImage = (props) => {
+const MyImage = ({ source, style = {}, ...props }) => {
   const resolveAssetSource = Image.resolveAssetSource;
-  const source = resolveAssetSource(props.source);
+  source = resolveAssetSource(source);
   if (source && source.uri && source.uri.match(".svg")) {
-    const style = props.style || {};
     if (source.__packager_asset && typeof style !== "number") {
       if (!style.width) {
         style.width = source.width;
@@ -17,7 +16,7 @@ const MyImage = (props) => {
     }
     return <SvgImage {...props} source={source} style={style} />;
   } else {
-    return <Image {...props} />;
+    return <Image {...props} source={source} style={style} />;
   }
 };
 
