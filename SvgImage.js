@@ -93,6 +93,7 @@ export const SvgImage = ({
           source={{ html }}
           injectedJavaScript={injectedJavaScript}
           javaScriptEnabled
+          cacheEnabled={true}
           onMessage={(event) => {
             if (event.nativeEvent.data === "pageLoaded") {
               setLoaded(true);
