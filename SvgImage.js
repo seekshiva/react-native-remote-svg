@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 const getHTML = (svgContent, style) => `
-<html data-key="key-${style.height}-${style.width}">
+<html>
   <head>
     <style>
       html, body {
@@ -18,9 +18,10 @@ const getHTML = (svgContent, style) => `
         position: fixed;
         top: 0;
         left: 0;
-        height: 100vh;
-        width: 100vw;
+        height: 100${Platform.OS === 'ios' ? 'vh' : '%'};
+        width: 100${Platform.OS === 'ios' ? 'vw' : '%'};
         overflow: hidden;
+        object-fit: contain;
       }
     </style>
   </head>
@@ -30,15 +31,17 @@ const getHTML = (svgContent, style) => `
 </html>
 `;
 
-const injectedJavaScript = `window.ReactNativeWebView.postMessage('pageLoaded'); true;`;
-
 export const SvgImage = ({ source: { uri }, style, containerStyle, onLoadStart, onLoadEnd }) => {
   const [svgContent, setSvgContent] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  let mounted = false;
+  
   useEffect(() => {
     doFetch(uri);
+    mounted = true;
+    () => mounted = false;
   }, [uri]);
-
+  
   async function doFetch() {
     if (uri) {
       onLoadStart && onLoadStart();
@@ -57,40 +60,33 @@ export const SvgImage = ({ source: { uri }, style, containerStyle, onLoadStart, 
       onLoadEnd && onLoadEnd();
     }
   }
+  
   if (svgContent) {
     const flattenedStyle = StyleSheet.flatten(style) || {};
     const html = getHTML(svgContent, flattenedStyle);
-    const webViewStyle = loaded
-      ? [
-          {
-            width: 200,
-            height: 100,
-          },
-          style,
-        ]
-      : { flex: 0, height: 0, opacity: 0 };
-
+    
     return (
-      <View pointerEvents="none" style={[style, containerStyle]}>
+      <View pointerEvents="none" style={[style, containerStyle]}
+            renderToHardwareTextureAndroid={true}>
         <WebView
           originWhitelist={['*']}
           useWebKit
-          style={webViewStyle}
+          style={{
+            ...style,
+            opacity: loaded ? 1 : 0,
+            flex: 1,
+          }}
           scrollEnabled={false}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           source={{ html }}
-          injectedJavaScript={injectedJavaScript}
-          javaScriptEnabled
-          onMessage={(event) => {
-            if (event.nativeEvent.data === 'pageLoaded') {
-              setLoaded(true);
-            }
-          }}
+          javaScriptEnabled={false}
+          onLoadEnd={(event) => !loaded && setLoaded(true)}
         />
       </View>
     );
   } else {
-    return <View pointerEvents="none" style={[containerStyle, style]} />;
+    return <View pointerEvents="none" style={[containerStyle, style]}
+                 renderToHardwareTextureAndroid={true}/>;
   }
 };
