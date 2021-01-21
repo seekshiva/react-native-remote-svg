@@ -16,7 +16,7 @@ const MyImage = ({ source, style = {}, ...props }) => {
     }
     return <SvgImage {...props} source={source} style={style} />;
   } else {
-    return <Image {...props} source={source} style={style} />;
+    return <Image {...props} source={source} style={style} resizeMode="contain" />;
   }
 };
 
