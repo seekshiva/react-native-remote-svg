@@ -1,8 +1,8 @@
 // @flow
 
-import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { WebView } from 'react-native-webview';
+import React, { Component } from "react";
+import { View, StyleSheet } from "react-native";
+import { WebView } from "react-native-webview";
 
 const getHTML = (svgContent, style) => `
 <html data-key="key-${style.height}-${style.width}">
@@ -37,7 +37,7 @@ class SvgImage extends Component {
   componentDidMount() {
     this.doFetch(this.props);
   }
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const prevUri = this.props.source && this.props.source.uri;
     const nextUri = nextProps.source && nextProps.source.uri;
 
@@ -45,12 +45,12 @@ class SvgImage extends Component {
       this.doFetch(nextProps);
     }
   }
-  doFetch = async props => {
+  doFetch = async (props) => {
     let uri = props.source && props.source.uri;
     if (uri) {
       props.onLoadStart && props.onLoadStart();
       if (uri.match(/^data:image\/svg/)) {
-        const index = uri.indexOf('<svg');
+        const index = uri.indexOf("<svg");
         this.setState({ fetchingUrl: uri, svgContent: uri.slice(index) });
       } else {
         try {
@@ -58,7 +58,7 @@ class SvgImage extends Component {
           const text = await res.text();
           this.setState({ fetchingUrl: uri, svgContent: text });
         } catch (err) {
-          console.error('got error', err);
+          console.error("got error", err);
         }
       }
       props.onLoadEnd && props.onLoadEnd();
@@ -74,14 +74,14 @@ class SvgImage extends Component {
       return (
         <View pointerEvents="none" style={[props.style, props.containerStyle]}>
           <WebView
-            originWhitelist={['*']}
+            originWhitelist={["*"]}
             scalesPageToFit={true}
             useWebKit={false}
             style={[
               {
                 width: 200,
                 height: 100,
-                backgroundColor: 'transparent',
+                backgroundColor: "transparent",
               },
               props.style,
             ]}
