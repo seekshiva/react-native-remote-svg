@@ -72,7 +72,8 @@ class SvgImage extends Component {
       const html = getHTML(svgContent, flattenedStyle);
 
       return (
-        <View pointerEvents="none" style={[props.style, props.containerStyle]}>
+        <View pointerEvents="none" style={[props.style, props.containerStyle]}
+          renderToHardwareTextureAndroid={true}>
           <WebView
             originWhitelist={['*']}
             scalesPageToFit={true}
