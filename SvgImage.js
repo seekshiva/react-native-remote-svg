@@ -3,8 +3,9 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
+import {encode as btoa} from 'base-64';
 
-const getHTML = (svgContent, style) => `
+const getHTML = (dataUrl, style) => `
 <html data-key="key-${style.height}-${style.width}">
   <head>
     <style>
@@ -15,25 +16,24 @@ const getHTML = (svgContent, style) => `
         width: 100%;
         overflow: hidden;
         background-color: transparent;
-      }
-      svg {
         position: fixed;
         top: 0;
         left: 0;
         height: 100%;
         width: 100%;
         overflow: hidden;
+        background-image: url(${dataUrl});
+        background-size: cover;
       }
     </style>
   </head>
   <body>
-    ${svgContent}
   </body>
 </html>
 `;
 
 class SvgImage extends Component {
-  state = { fetchingUrl: null, svgContent: null };
+  state = { fetchingUrl: null, dataUrl: null };
   componentDidMount() {
     this.doFetch(this.props);
   }
@@ -49,14 +49,13 @@ class SvgImage extends Component {
     let uri = props.source && props.source.uri;
     if (uri) {
       props.onLoadStart && props.onLoadStart();
-      if (uri.match(/^data:image\/svg/)) {
-        const index = uri.indexOf('<svg');
-        this.setState({ fetchingUrl: uri, svgContent: uri.slice(index) });
+      if (uri.match(/^data:/)) {
+        this.setState({ fetchingUrl: uri, dataUrl: uri });
       } else {
         try {
           const res = await fetch(uri);
-          const text = await res.text();
-          this.setState({ fetchingUrl: uri, svgContent: text });
+          const text = 'data:image/svg+xml;base64,' + btoa(await res.text());
+          this.setState({ fetchingUrl: uri, dataUrl: text });
         } catch (err) {
           console.error('got error', err);
         }
@@ -66,10 +65,10 @@ class SvgImage extends Component {
   };
   render() {
     const props = this.props;
-    const { svgContent } = this.state;
-    if (svgContent) {
+    const { dataUrl } = this.state;
+    if (dataUrl) {
       const flattenedStyle = StyleSheet.flatten(props.style) || {};
-      const html = getHTML(svgContent, flattenedStyle);
+      const html = getHTML(dataUrl, flattenedStyle);
 
       return (
         <View pointerEvents="none" style={[props.style, props.containerStyle]}
@@ -80,8 +79,8 @@ class SvgImage extends Component {
             useWebKit={false}
             style={[
               {
-                width: 200,
-                height: 100,
+                width: '100%',
+                height: '100%',
                 backgroundColor: 'transparent',
               },
               props.style,
