@@ -48,7 +48,6 @@ class SvgImage extends Component {
   doFetch = async props => {
     let uri = props.source && props.source.uri;
     if (uri) {
-      props.onLoadStart && props.onLoadStart();
       if (uri.match(/^data:image\/svg/)) {
         const index = uri.indexOf('<svg');
         this.setState({ fetchingUrl: uri, svgContent: uri.slice(index) });
@@ -61,7 +60,6 @@ class SvgImage extends Component {
           console.error('got error', err);
         }
       }
-      props.onLoadEnd && props.onLoadEnd();
     }
   };
   render() {
@@ -75,6 +73,7 @@ class SvgImage extends Component {
         <View pointerEvents="none" style={[props.style, props.containerStyle]}
           renderToHardwareTextureAndroid={true}>
           <WebView
+            {...props}
             originWhitelist={['*']}
             scalesPageToFit={true}
             useWebKit={false}
@@ -89,7 +88,7 @@ class SvgImage extends Component {
             scrollEnabled={false}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
-            source={{ html }}
+            source={{ html, baseUrl: '' }}
           />
         </View>
       );
