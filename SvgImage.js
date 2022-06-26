@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
 
-const heightUnits = Platform.OS === 'ios' ? 'vh' : '%'
+const heightUnits = Platform.OS === "ios" ? "vh" : "%";
 
 const getHTML = (svgContent, style) => `
 <html data-key="key-${style.height}-${style.width}">
@@ -35,23 +35,23 @@ const getHTML = (svgContent, style) => `
 `;
 
 function SvgImage({ source, onLoadStart, onLoadEnd, style, containerStyle }) {
-  const [_fetchingUrl, setFetchingUrl] = useState(null);
   const [svgContent, setSvgContent] = useState(null);
 
   const uri = source && source.uri;
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     async function doFetch() {
       if (uri) {
         onLoadStart && onLoadStart();
         if (uri.match(/^data:image\/svg/)) {
           const index = uri.indexOf("<svg");
-          setFetchingUrl(uri);
           setSvgContent(uri.slice(index));
         } else {
           try {
-            const res = await fetch(uri);
+            const res = await fetch(uri, { signal });
             const text = await res.text();
-            setFetchingUrl(uri);
             setSvgContent(text);
           } catch (err) {
             console.error("got error", err);
@@ -62,6 +62,10 @@ function SvgImage({ source, onLoadStart, onLoadEnd, style, containerStyle }) {
     }
 
     doFetch();
+
+    return () => {
+      controller.abort();
+    };
   }, [uri]);
 
   if (svgContent) {
