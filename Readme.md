@@ -9,6 +9,11 @@ Using [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/):
 
     $ yarn add react-native-remote-svg
 
+This library depends on `react-native-webview` as peerDependency, which means you need to install the webview library and link it to RN project for this to work
+
+    $ yarn add react-native-webview # If you don't already have this
+    $ react-native link
+
 `Image` component in react-native doesn't yet support svg file type. This
 package gives you an `Image` component that supports both svg and png file
 types.
