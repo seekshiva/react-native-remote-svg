@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
 
+const heightUnits = Platform.OS === 'ios' ? 'vh' : '%'
+
 const getHTML = (svgContent, style) => `
 <html data-key="key-${style.height}-${style.width}">
   <head>
@@ -11,8 +13,8 @@ const getHTML = (svgContent, style) => `
       html, body {
         margin: 0;
         padding: 0;
-        height: 100%;
-        width: 100%;
+        height: 100${heightUnits};
+        width: 100${heightUnits};
         overflow: hidden;
         background-color: transparent;
       }
