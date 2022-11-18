@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { WebView } from "react-native-webview";
 
 const heightUnits = Platform.OS === "ios" ? "vh" : "%";
