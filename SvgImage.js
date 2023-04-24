@@ -6,7 +6,19 @@ import { WebView } from "react-native-webview";
 
 const heightUnits = Platform.OS === "ios" ? "vh" : "%";
 
-const getHTML = (svgContent, style) => `
+const getHTML = (svgContent, style) => {
+  if (!svgContent.includes("viewBox")) {
+    // if no viewBox, add a viewBox with the same height and width as the svg
+    // (I assume that no viewBox means the <svg> tag has a height and width)
+    // Any improvements on the regex is appreciated
+
+    try{
+      height = svgContent.match(/(?:height ?= ?(?:"|'))([0-9]+\.?[0-9]*)(?=(?:"|'))/)[1];
+      width = svgContent.match(/(?:width ?= ?(?:"|'))([0-9]+\.?[0-9]*)(?=(?:"|'))/)[1];
+      svgContent = svgContent.replace(`<svg`, `<svg viewBox="0 0 ${width} ${height}"`);
+    } catch (error){}
+  }
+  return `
 <html data-key="key-${style.height}-${style.width}">
   <head>
     <style>
@@ -33,6 +45,7 @@ const getHTML = (svgContent, style) => `
   </body>
 </html>
 `;
+};
 
 function SvgImage({ source, onLoadStart, onLoadEnd, style, containerStyle }) {
   const [svgContent, setSvgContent] = useState(null);
